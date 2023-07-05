@@ -1,0 +1,29 @@
+.ant-menu-light.ant-menu-horizontal >.ant-menu-item-selected,
+.ant-menu-light .ant-menu-submenu-selected >.ant-menu-submenu-title {
+    color: white;
+}
+
+.icon-image {
+    width: 25px;
+    height: 25px;
+    margin-top: 8px;
+    margin-left: 10px;
+}
+
+.popup-todo{
+    width: 350px;
+    height: fit-content;
+    max-height: 500px;
+}
+
+.ant-collapse {
+    border-radius: 0px;
+}
+
+.light .ant-collapse-header .ant-collapse-expand-icon {
+    color: black;
+}
+
+.dark .ant-collapse-header .ant-collapse-expand-icon {
+    color: white;
+}
