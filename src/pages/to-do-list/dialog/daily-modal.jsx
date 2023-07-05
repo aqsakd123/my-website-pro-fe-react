@@ -22,12 +22,13 @@ export const StyledModal = styled(Modal)`
     .ant-modal-content {
         border-radius: 0px;
         min-height: 500px;
+        background-color: ${props => props.isDarkMode ? `${props.colors.primary[400]}` : `white`};
     }
     
     .ant-modal-title {
         background-color: black;
         display: flex;
-        background-color: ${props => `${props.colors.primary[400]}`};
+        background-color: ${props => props.isDarkMode ? `${props.colors.primary[400]}` : `white`};
         font-size: 20px;
         margin-bottom: 20px;  
         font-family: "PlusJakartaSans-ExtraBold",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
@@ -114,7 +115,7 @@ export const StyledModal = styled(Modal)`
 
     .ant-select-lg .ant-select-selector, .ant-picker, .ant-input-number, .ant-input {
         border-radius: 0px;
-        background-color: ${props => `${props.colors.blueAccent[900]}`};
+        background-color: ${props => props.isDarkMode ? props.colors.primary[400] : "white"};
         
         .ant-picker-clear {
             color: ${props => `${props.colors.primary[100]}`};
@@ -124,7 +125,8 @@ export const StyledModal = styled(Modal)`
     }
     
     .ant-picker-disabled, .ant-input-number-disabled, .ant-checkbox-wrapper-disabled, .ant-input-disabled {
-         opacity: 0.5;
+         opacity: 0.9;
+         background-color: ${props => `${props.colors.blueAccent[900]}`};
     }
 
     .textarea-custom-resume {
