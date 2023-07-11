@@ -1,43 +1,19 @@
 import {Box} from "@mui/material";
 import {useLayout} from "../../../components/layout-context";
 import {useEffect, useState} from "react";
-import {
-    Button,
-    Checkbox, Collapse,
-    DatePicker,
-    Form,
-    Input,
-    InputNumber,
-    Popconfirm,
-    Rate,
-    Select,
-    Space,
-    TimePicker, Tooltip
-} from "antd";
+import {Button, Collapse, DatePicker, Form, Input, Popconfirm, Rate, Tooltip} from "antd";
 import dayjs from "dayjs";
-import {ACTION, dateOptions, listRoutineType} from "../common/common-data";
+import {ACTION} from "../common/common-data";
 import TextArea from "antd/es/input/TextArea";
-import {
-    CarryOutOutlined,
-    CheckSquareOutlined,
-    CloseOutlined,
-    DeleteOutlined, DownOutlined,
-    PlusOutlined,
-    QuestionCircleOutlined, StarOutlined
-} from "@ant-design/icons";
-import ToDoItemCheckList from "../component/to-do-check-list";
+import {CheckSquareOutlined, DeleteOutlined, DownOutlined, QuestionCircleOutlined} from "@ant-design/icons";
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import {DragDropContext, Draggable} from "react-beautiful-dnd";
-import {StrictModeDroppable} from "../../../components/StrictModeDroppable";
-import {changeStatus, detailProject, detailTask, updateTask} from "../service/service";
-import {dayjsFormat, mergeChildren} from "../common/common-function";
-import {errorInfo, successInfo} from "../../../common/common";
+import {changeStatus, detailProject, detailTaskGraphQL, updateTask} from "../service/service";
+import {mergeChildren} from "../common/common-function";
+import {successInfo} from "../../../common/common";
 import Loading from "../../layout/loading";
 import {Focus, StyledModal} from "./daily-modal";
-import ToDoItemGroupList from "../component/to-do-group-list";
 import ChildTaskCheckList from "../component/child-task-check";
 import Tree from "antd/es/tree/Tree";
-import Treeize from "treeize";
 
 export default function ProjectModal({id, showModal, setShowModal, undoDelete}) {
 
@@ -92,12 +68,11 @@ export default function ProjectModal({id, showModal, setShowModal, undoDelete}) 
                     showLine
                     switcherIcon={<DownOutlined />}
                     onSelect={(key) => {
-                        if(key[0] !== form.getFieldValue('id')){
+                        if(key[0] && key[0] !== form.getFieldValue('id')){
                             handleUpdateTask(form.getFieldsValue(true))
                                 .then(r => setSearchId(key[0]))
                         }
                     }}
-                    defaultExpandedKeys={['0-0-0']}
                     treeData={projectParent}
                 />
             ,
@@ -107,15 +82,6 @@ export default function ProjectModal({id, showModal, setShowModal, undoDelete}) 
     useEffect(() => {
         setLoading(true)
         handleFetchDetail(searchId)
-            .then(r => {
-                form.setFieldsValue(handleDivideChidlren(r?.data))
-                if(r?.data?.projectParentId && !projectParentId){
-                    setProjectParentId(r?.data?.projectParentId)
-                }
-                setRender(!render)
-            })
-            .finally(() => setLoading(false))
-
     }, [searchId])
 
     useEffect(() => {
@@ -126,6 +92,25 @@ export default function ProjectModal({id, showModal, setShowModal, undoDelete}) 
                 })
         }
     }, [projectParentId, loadingParentTask])
+
+    function handleFetchDetail(id) {
+        setLoading(true)
+        detailTaskGraphQL(id, showModal)
+            .then(r => {
+                if (!(r?.data?.errors)){
+                    const data = r?.data?.data?.findTaskById
+                    form.setFieldsValue(handleDivideChidlren(data))
+                    if(data?.projectParentId && !projectParentId){
+                        setProjectParentId(data?.projectParentId)
+                    }
+                    setRender(!render)
+                } else {
+                    throw new Error(r?.data?.errors?.map(item => item?.message))
+                }
+            })
+            .catch(r => console.log(r))
+            .finally(() => setLoading(false))
+    }
 
     const handleOnDragEnd = (result, taskListName) => {
         if (!result?.destination) return;
@@ -139,11 +124,6 @@ export default function ProjectModal({id, showModal, setShowModal, undoDelete}) 
 
     async function handleCancel() {
         const res = await handleUpdateTask(form.getFieldsValue(true))
-    }
-
-    async function handleFetchDetail(id) {
-        return await detailTask(id)
-            .catch(r => console.log(r))
     }
 
     async function handleUpdateTask(payload) {
@@ -280,7 +260,7 @@ export default function ProjectModal({id, showModal, setShowModal, undoDelete}) 
                         style={{ display: 'grid' }}
                         gridTemplateColumns="repeat(12, 1fr)"
                         gap={'20px'}
-                        className={'container'}>
+                        className={'container-modal'}>
                         <Box
                             order={ isMobile ? '2' : '1' }
                             gridColumn={isMobile? "span 12" : "span 7"}

@@ -7,7 +7,7 @@ import dayjs from "dayjs";
 import {CloseOutlined} from "@ant-design/icons";
 import DragIndicatorOutlinedIcon from '@mui/icons-material/DragIndicatorOutlined';
 import {dayjsFormat} from "../common/common-function";
-import {changeStatus, insertSubGroupTask, updateSubTask} from "../service/service";
+import {changeStatus, } from "../service/service";
 import {errorInfo} from "../../../common/common";
 import {ACTION} from "../common/common-data";
 
@@ -63,24 +63,6 @@ export default function ToDoItemCheckList(props) {
     }, [index])
 
     const fieldStatus = [childName, index, 'isCompleted']
-
-    function modifyCheckList() {
-        if(form.getFieldValue([childName, index])?.id) {
-            updateSubTask(form.getFieldValue([childName, index])?.id, {...addObject, ...form.getFieldValue([childName, index])})
-                .catch(r => {
-                    errorInfo('ERROR_OCCURRED')
-                })
-        } else {
-            insertSubGroupTask(form.getFieldValue('id'), {...addObject, ...form.getFieldValue([childName, index])})
-                .then(r => {
-                    form.setFieldValue([childName, index], r?.data)
-                })
-                .catch(r => {
-                    errorInfo('ERROR_OCCURRED')
-                    remove(index)
-                })
-        }
-    }
 
     async function handleChangeStatus(payload) {
         await changeStatus(payload)
@@ -146,9 +128,6 @@ export default function ToDoItemCheckList(props) {
                         if (!e?.target?.value) {
                             handleRemoveSubTask()
                         }
-                        // else {
-                        //     modifyCheckList()
-                        // }
                     }}
                 />
             </Form.Item>
@@ -165,7 +144,6 @@ export default function ToDoItemCheckList(props) {
                         format={'HH:mm'}
                         minuteStep={15}
                         placeholder="Time"
-                        // onChange={modifyCheckList}
                         style={{ height: '32px', width: '100%' }}
                     />
                 </Form.Item>
@@ -180,7 +158,6 @@ export default function ToDoItemCheckList(props) {
                     <DatePicker
                         disabled={form.getFieldValue('isCompleted') || form.getFieldValue(fieldStatus)}
                         style={{ height: '32px', width: '100%' }}
-                        // onChange={modifyCheckList}
                     />
                 </Form.Item>
             }

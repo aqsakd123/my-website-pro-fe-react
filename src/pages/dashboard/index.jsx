@@ -1,18 +1,12 @@
 import {useAuth} from "../auth/auth-context";
-import {useAxios} from "../auth/axios-context";
-import CustomButton from "../../components/item/custom-button";
 import {Box} from "@mui/material";
 import {useLayout} from "../../components/layout-context";
 import {Timeline} from "antd";
-import {SmileOutlined} from "@ant-design/icons";
 import '../../style/dashboard.css'
 import styled from "@emotion/styled";
-import {StyledCheckList} from "../to-do-list/component/to-do-check-list";
-import {useEffect, useState} from "react";
 import {generateTimeLine} from "./common/common-function";
-import {changeStatus, updateTask} from "../to-do-list/service/service";
+import {changeStatus} from "../to-do-list/service/service";
 import ToDoColumn from "../to-do-list/component/to-do-column";
-import {fetchTimeLine} from "./service/service";
 import {useSelector} from "react-redux";
 import {selectTimeline} from "../layout/store/timeline-reducer";
 

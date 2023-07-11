@@ -1,13 +1,8 @@
 import {useLayout} from "../../../components/layout-context";
-import {useEffect, useRef, useState} from "react";
-import {Button, DatePicker, Form, Popconfirm, Space, TimePicker} from "antd";
-import DragIndicatorOutlinedIcon from "@mui/icons-material/DragIndicatorOutlined";
-import {dayjsFormat} from "../common/common-function";
-import dayjs from "dayjs";
-import {CloseOutlined, PlusOutlined, QuestionCircleOutlined} from "@ant-design/icons";
-import ToDoItemCheckList, {StyledCheckList, StyledDropArea, StyledTextArea} from "./to-do-check-list";
+import {Button, Form} from "antd";
+import {PlusOutlined} from "@ant-design/icons";
+import ToDoItemCheckList from "./to-do-check-list";
 import {Box} from "@mui/material";
-import styled from "@emotion/styled";
 import {DragDropContext, Draggable} from "react-beautiful-dnd";
 import {StrictModeDroppable} from "../../../components/StrictModeDroppable";
 import ToDoItemGroupList from "./to-do-group-list";

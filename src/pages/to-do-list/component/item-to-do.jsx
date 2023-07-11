@@ -2,10 +2,8 @@ import {Box, IconButton} from "@mui/material";
 import {useLayout} from "../../../components/layout-context";
 import {useState} from "react";
 import DragIndicatorOutlinedIcon from "@mui/icons-material/DragIndicatorOutlined";
-import {DragOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusCircleTwoTone} from "@ant-design/icons";
+import {DragOutlined, PlusCircleTwoTone} from "@ant-design/icons";
 import styled from "@emotion/styled";
-import {Button} from "antd";
-import {ACTION} from "../common/common-data";
 import ToDoItemBox from "./item-to-do-box";
 import HobbyToDoItemBox from "./hobby-item-to-do";
 

@@ -1,18 +1,16 @@
 import {useLocation, useNavigate} from "react-router-dom";
-import {Menu, Popover, Select} from "antd";
-import {CheckSquareOutlined, MenuOutlined} from "@ant-design/icons";
+import {Popover, Select} from "antd";
 import {useAuth} from "../auth/auth-context";
 import {useDispatch} from "react-redux";
 import {useLayout} from "../../components/layout-context";
 import styled from "@emotion/styled";
 import {Box, MenuItem, MenuList, Switch,} from "@mui/material";
-import {changeLanguageState, changeTimeLine, removeTimeline, toggleTheme} from "./store/action";
+import {changeLanguageState, removeTimeline, toggleTheme} from "./store/action";
 import {languageList} from "../../locale/language-list";
 import i18n from "i18next";
 import {successInfo} from "../../common/common";
 import MenuTopBar from "./menu-list-top";
 import '../../style/topbar.css'
-import {menu} from "./common/common-data";
 import Avatar from "antd/es/avatar/avatar";
 
 const MaterialUISwitch = styled(Switch)(( ) => ({

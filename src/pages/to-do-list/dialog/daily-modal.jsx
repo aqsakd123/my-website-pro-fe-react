@@ -12,11 +12,10 @@ import ToDoItemCheckList from "../component/to-do-check-list";
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
 import {DragDropContext, Draggable} from "react-beautiful-dnd";
 import {StrictModeDroppable} from "../../../components/StrictModeDroppable";
-import {changeStatus, detailTask, updateTask} from "../service/service";
+import {changeStatus, detailTaskGraphQL, updateTask} from "../service/service";
 import {dayjsFormat} from "../common/common-function";
 import {successInfo} from "../../../common/common";
 import Loading from "../../layout/loading";
-import ChildTaskCheckList from "../component/child-task-check";
 
 export const StyledModal = styled(Modal)`
     .ant-modal-content {
@@ -42,7 +41,7 @@ export const StyledModal = styled(Modal)`
         color: ${props => `${props.colors.primary[100]}`};
     }
     
-    .container {
+    .container-modal {
         width: 100%;
         display: flex;
     }
@@ -52,17 +51,16 @@ export const StyledModal = styled(Modal)`
     }
     
     .left-container {
-        width: 65%;
-        padding: 10px;
+        width: 100%;
     }
     
     .right-container {
-        width: 35%;
+        width: 90%;
         border: 5px solid blue;
         padding: 10px;
         background-color: ${props => `${props.colors.blueAccent[800]}`};
         height: fit-content;
-            }
+    }
     
     .right-project-container {
         width: 100%;
@@ -110,7 +108,7 @@ export const StyledModal = styled(Modal)`
     }
 
     .to-do-box {
-        width : 80%;
+        width : 95%;
     }
 
     .ant-select-lg .ant-select-selector, .ant-picker, .ant-input-number, .ant-input {
@@ -126,7 +124,6 @@ export const StyledModal = styled(Modal)`
     
     .ant-picker-disabled, .ant-input-number-disabled, .ant-checkbox-wrapper-disabled, .ant-input-disabled {
          opacity: 0.9;
-         background-color: ${props => `${props.colors.blueAccent[900]}`};
     }
 
     .textarea-custom-resume {
@@ -231,7 +228,7 @@ export const Focus = (
 
 export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
 
-    const { isDarkMode, colors } = useLayout()
+    const { isDarkMode, isMobile, colors } = useLayout()
     const [form] = Form.useForm()
     const [stateForm, setStateForm] = useState()
     const [loading, setLoading] = useState(false)
@@ -258,9 +255,14 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
 
     function handleFetchDetail(id) {
         setLoading(true)
-        detailTask(id)
+        detailTaskGraphQL(id, showModal)
             .then(r => {
-                setStateForm(r?.data)
+                if (!(r?.data?.errors)){
+                    form.setFieldsValue(r?.data?.data?.findTaskById)
+                    setStateForm(r?.data?.data?.findTaskById)
+                } else {
+                    throw new Error(r?.data?.errors?.map(item => item?.message))
+                }
             })
             .catch(r => console.log(r))
             .finally(() => setLoading(false))
@@ -294,15 +296,27 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
             >
                 Delete
             </Button>
-            <Button type="primary"
-                    onClick={() => {
-                        handleChangeStatus({ id: stateForm.id, action: ACTION.COMPLETE })
-                        successInfo('COMPLETE_SUCCESS')
-                    }}
-                    icon={<CheckSquareOutlined />}
-            >
-                Finish
-            </Button>
+            {form.getFieldValue('isCompleted')?
+                <Button type="primary"
+                        onClick={() => {
+                            handleChangeStatus({ id: stateForm.id, action: ACTION.UNDO_COMPLETE })
+                            successInfo('COMPLETE_SUCCESS')
+                        }}
+                        icon={<CheckSquareOutlined />}
+                >
+                    UNDO
+                </Button>
+                :
+                <Button type="primary"
+                        onClick={() => {
+                            handleChangeStatus({ id: stateForm.id, action: ACTION.COMPLETE })
+                            successInfo('COMPLETE_SUCCESS')
+                        }}
+                        icon={<CheckSquareOutlined />}
+                >
+                    Finish
+                </Button>
+            }
         </>
     )
 
@@ -318,7 +332,7 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                     .then(r => setShowModal(prevState => ({...prevState, id: null})))
             }}
         >
-            {(loading && !stateForm) &&
+            {loading &&
                 <Box sx={{ height: '500px' }}>
                     <Loading />
                 </Box>
@@ -327,6 +341,7 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                 <Form
                     layout={"vertical"}
                     form={form}
+                    onValuesChange={() => console.log("Changed")}
                     initialValues={stateForm}
                     preserve={true}
                     disabled={form.getFieldValue('isCompleted') || form.getFieldValue('isDeleted') }
@@ -363,8 +378,15 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                         </Form.Item>
                     </Box>
                     <Box>
-                        <Box className={'container'}>
-                            <Box className={'left-container'}>
+                        <Box
+                            style={{ display: 'grid' }}
+                            gridTemplateColumns="repeat(12, 1fr)"
+                            gap={'20px'}
+                            className={'container-modal'}>
+                            <Box
+                                order={ isMobile ? '2' : '1' }
+                                gridColumn={isMobile? "span 12" : "span 8"}
+                                className={'left-container'}>
                                 <Form.Item
                                     name={'description'}
                                     style={{ width: '100%' }}
@@ -380,10 +402,13 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                                     style={{ width: '100%' }}
                                     initialValue={1}
                                 >
-                                    <Rate count={10} />
+                                    <Rate count={10}/>
                                 </Form.Item>
                             </Box>
-                            <Box className={'right-container'}>
+                            <Box
+                                order={ isMobile ? '1' : '2'}
+                                gridColumn={isMobile? "span 12" : "span 4"}
+                                className={'right-container'}>
                                 <Form.Item
                                     name={'startDate'}
                                     getValueProps={(value) => {
@@ -439,7 +464,7 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                                     />
                                 </Form.Item>
                                 }
-                                {form.getFieldValue('routineType') === 'DAILY' &&
+                                {(showModal === 'DAILY' && form.getFieldValue('routineType') === 'DAILY') &&
                                 <Box sx={{ display:"flex", }}>
                                     <span style={{ width: '40%' }}>
                                         Task will be looped every
@@ -460,7 +485,7 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                                 <Form.Item
                                     name={'routine'}
                                     className={'toggle-select-routine'}
-                                    hidden={form.getFieldValue('routineType') !== 'CUSTOM'}
+                                    hidden={!(showModal === 'DAILY' && form.getFieldValue('routineType') === 'CUSTOM')}
                                 >
                                     <Checkbox.Group options={dateOptions} />
                                 </Form.Item>

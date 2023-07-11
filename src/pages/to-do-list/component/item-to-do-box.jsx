@@ -1,14 +1,8 @@
-import {Box, IconButton} from "@mui/material";
+import {Box} from "@mui/material";
 import {useLayout} from "../../../components/layout-context";
-import {useState} from "react";
-import DragIndicatorOutlinedIcon from "@mui/icons-material/DragIndicatorOutlined";
-import {DragOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusCircleTwoTone} from "@ant-design/icons";
-import styled from "@emotion/styled";
-import {Button, Tag} from "antd";
-import {ACTION} from "../common/common-data";
-import {Focus, PinOutLinedIcon} from "../dialog/daily-modal";
+import {Tag} from "antd";
+import {PinOutLinedIcon} from "../dialog/daily-modal";
 import dayjs from "dayjs";
-import moment from "moment";
 
 export default function ToDoItemBox({typeCode, data, setShowModal}) {
     const { isDarkMode, colors, transparentColor } = useLayout()

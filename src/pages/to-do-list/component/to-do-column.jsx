@@ -2,11 +2,11 @@ import {Box, IconButton, MenuItem, MenuList} from "@mui/material";
 import {useLayout} from "../../../components/layout-context";
 import ToDoItem from "./item-to-do";
 import {useEffect, useState} from "react";
-import {changeStatus, filterTask, insertTask} from "../service/service";
+import {changeStatus, filterTaskGraphQL, insertTask} from "../service/service";
 import {useAxios} from "../../auth/axios-context";
 import {Button, Popover, Select, Switch} from "antd";
 import {ACTION, orderItemOptions} from "../common/common-data";
-import {OrderedListOutlined, PlusCircleOutlined, PlusCircleTwoTone} from "@ant-design/icons";
+import {PlusCircleOutlined} from "@ant-design/icons";
 import CustomIcon from "../../../components/item/custom-icon";
 import {DragDropContext, Draggable} from "react-beautiful-dnd";
 import {StrictModeDroppable} from "../../../components/StrictModeDroppable";
@@ -90,6 +90,41 @@ export default function ToDoColumn({typeCode}) {
         handleSaveTask({ name: 'NEW TASK', typeCode: typeCode, taskListOrder: position })
     }
 
+    function handleFilterTask(payload) {
+        // filterTask(payload)
+        //     .then(r => setToDoList(r?.data))
+        //     .catch(r => console.log(r))
+        const variable = { filterRequest: payload }
+        filterTaskGraphQL(variable)
+            .then(r => {
+                if (!(r?.data?.errors)){
+                    setToDoList(r?.data?.data?.filter)
+                } else {
+                    throw new Error(r?.data?.errors?.map(item => item?.message))
+                }
+            })
+            .catch(r => console.log(r))
+    }
+    function handleSaveTask(payload) {
+        insertTask(payload)
+            .then(r => handleFilterTask(filter))
+            .catch(r => console.log(r))
+    }
+
+    function handleChangeStatus(payload) {
+        setLoading(true)
+        changeStatus(payload)
+            .then(r => handleFilterTask(filter))
+            .catch(r => console.log(r))
+            .finally(() => setLoading(false))
+    }
+
+    async function undoDelete(id) {
+        await changeStatus({id: id, action: ACTION.UNDO_DELETE})
+            .then(r => handleFilterTask(filter))
+            .catch(r => console.log(r))
+    }
+
     const content = (
         <MenuList>
             <MenuItem onClick={() => {
@@ -113,32 +148,6 @@ export default function ToDoColumn({typeCode}) {
             </MenuItem>
         </MenuList>
     )
-
-    function handleFilterTask(payload) {
-        filterTask(payload)
-            .then(r => setToDoList(r?.data))
-            .catch(r => console.log(r))
-    }
-
-    function handleSaveTask(payload) {
-        insertTask(payload)
-            .then(r => handleFilterTask(filter))
-            .catch(r => console.log(r))
-    }
-
-    function handleChangeStatus(payload) {
-        setLoading(true)
-        changeStatus(payload)
-            .then(r => handleFilterTask(filter))
-            .catch(r => console.log(r))
-            .finally(() => setLoading(false))
-    }
-
-    async function undoDelete(id) {
-        await changeStatus({id: id, action: ACTION.UNDO_DELETE})
-            .then(r => handleFilterTask(filter))
-            .catch(r => console.log(r))
-    }
 
     return (
         <Box

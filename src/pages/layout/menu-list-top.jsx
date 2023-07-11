@@ -1,6 +1,6 @@
-import {menu, pages} from "./common/common-data";
+import {menu} from "./common/common-data";
 import {useLocation, useNavigate} from "react-router-dom";
-import {Button, Collapse, Menu, Popover} from "antd";
+import {Collapse, Menu} from "antd";
 import {useAuth} from "../auth/auth-context";
 import {useLayout} from "../../components/layout-context";
 import SubMenu from "antd/es/menu/SubMenu";
@@ -9,7 +9,6 @@ import {changeStatus} from "../to-do-list/service/service";
 import ToDoTopBar from "./component/to-do-top-bar";
 import {useDispatch, useSelector} from "react-redux";
 import {changeTimeLine} from "./store/action";
-import {selectLayout} from "./store/layout-reducer";
 import {selectTimeline} from "./store/timeline-reducer";
 
 export default function MenuTopBar(){
@@ -46,6 +45,7 @@ export default function MenuTopBar(){
 
     useEffect(() => {
         if (!(token && userMail.current)) return;
+        return;
         let url = process.env.REACT_APP_BASE_URL + '/api/public/dashboard/get-time-line-stream?email=' + userMail.current;
 
         const sse = new EventSource(url);

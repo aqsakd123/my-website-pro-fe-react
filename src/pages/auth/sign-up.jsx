@@ -6,7 +6,6 @@ import {useAuth} from "./auth-context";
 import {addDocument} from "../../common/firebase-common";
 import CustomButton from "../../components/item/custom-button";
 import {useLayout} from "../../components/layout-context";
-import styled from "@emotion/styled";
 import {ROLES} from "./common-data";
 
 export default function SignUp() {

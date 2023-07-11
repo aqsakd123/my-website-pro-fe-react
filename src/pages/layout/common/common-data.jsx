@@ -1,13 +1,4 @@
-import {
-    AppstoreOutlined,
-    BookOutlined,
-    CheckSquareOutlined,
-    MailOutlined,
-    MenuOutlined,
-    SettingOutlined
-} from "@ant-design/icons";
-import {Box} from "@mui/material";
-import {Popover} from "antd";
+import {BookOutlined, CheckSquareOutlined} from "@ant-design/icons";
 
 export const pages = [
     {

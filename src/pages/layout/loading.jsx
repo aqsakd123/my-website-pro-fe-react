@@ -1,4 +1,4 @@
-import {Backdrop, Box, CircularProgress} from "@mui/material";
+import {Backdrop, CircularProgress} from "@mui/material";
 import React from "react";
 import {useLayout} from "../../components/layout-context";
 

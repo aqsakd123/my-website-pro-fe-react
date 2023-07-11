@@ -35,18 +35,19 @@ const AxiosProvider = ({ children }) => {
         );
 
         const responseIntercept = axiosInstance.interceptors.response.use(
-            response => response,
+            async (response) => {
+                //graphql errors covered
+                if(response?.config?.url?.endsWith("graphql") && response?.data?.errors){
+                    errorInfo('ERROR_OCCURRED')
+                }
+                return response
+            },
             async (error) => {
                 const prevRequest = error?.config;
                 const errMsg = error?.response?.data?.message
                 if (errMsg) {
-                    // if (errMsg === 'JWT.WRONG'){
-                    //     const token = await currentUser?.getIdToken(true)
-                    //     prevRequest.headers['Authorization'] = `Bearer ${token}`;
-                    //     return axiosInstance(prevRequest)
-                    // }
                     errorInfo(errMsg)
-                } else if (errMsg !== 401) {
+                } else {
                     let msg
                     switch (error?.response?.status) {
                         case 403:

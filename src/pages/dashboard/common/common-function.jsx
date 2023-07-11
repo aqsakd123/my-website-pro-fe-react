@@ -6,8 +6,6 @@ import dayjs from "dayjs";
 import {Tag, Tooltip} from "antd";
 import styled from "@emotion/styled";
 import {ACTION} from "../../to-do-list/common/common-data";
-import {PinOutLinedIcon} from "../../to-do-list/dialog/daily-modal";
-import moment from "moment";
 
 export const StyledTag = styled(Tag)`
     width: fit-content;

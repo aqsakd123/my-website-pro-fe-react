@@ -6,14 +6,14 @@ import {ACTION} from "../common/common-data";
 import TextArea from "antd/es/input/TextArea";
 import {CheckSquareOutlined, DeleteOutlined} from "@ant-design/icons";
 import PushPinOutlinedIcon from '@mui/icons-material/PushPinOutlined';
-import {changeStatus, detailTask, undoDelete, updateTask} from "../service/service";
+import {changeStatus, detailTaskGraphQL, updateTask} from "../service/service";
 import {successInfo} from "../../../common/common";
 import Loading from "../../layout/loading";
 import {Focus, StyledModal} from "./daily-modal";
 
 export default function HobbyModal({id, showModal, setShowModal, undoDelete}) {
 
-    const { isDarkMode, colors } = useLayout()
+    const { isDarkMode, colors, isMobile } = useLayout()
 
     const [form] = Form.useForm()
     const [stateForm, setStateForm] = useState()
@@ -31,9 +31,14 @@ export default function HobbyModal({id, showModal, setShowModal, undoDelete}) {
 
     function handleFetchDetail(id) {
         setLoading(true)
-        detailTask(id)
+        detailTaskGraphQL(id, "HOBBY")
             .then(r => {
-                setStateForm(r?.data)
+                if (!(r?.data?.errors)){
+                    form.setFieldsValue(r?.data?.data?.findTaskById)
+                    setStateForm(r?.data?.data?.findTaskById)
+                } else {
+                    throw new Error(r?.data?.errors?.map(item => item?.message))
+                }
             })
             .catch(r => console.log(r))
             .finally(() => setLoading(false))
@@ -91,7 +96,7 @@ export default function HobbyModal({id, showModal, setShowModal, undoDelete}) {
                     .then(r => setShowModal(prevState => ({...prevState, id: null})))
             }}
         >
-            {(loading && !stateForm) &&
+            {(loading) &&
             <Box sx={{ height: '500px' }}>
                 <Loading />
             </Box>
@@ -136,8 +141,15 @@ export default function HobbyModal({id, showModal, setShowModal, undoDelete}) {
                     </Form.Item>
                 </Box>
                 <Box>
-                    <Box className={'container'}>
-                        <Box className={'left-container'}>
+                    <Box
+                        style={{ display: 'grid' }}
+                        gridTemplateColumns="repeat(12, 1fr)"
+                        gap={'20px'}
+                        className={'container-modal'}>
+                        <Box
+                            order={ isMobile ? '2' : '1' }
+                            gridColumn={isMobile? "span 12" : "span 8"}
+                            className={'left-container'}>
                             <Form.Item
                                 name={'description'}
                                 style={{ width: '100%' }}
@@ -156,7 +168,10 @@ export default function HobbyModal({id, showModal, setShowModal, undoDelete}) {
                                 <Rate count={10} />
                             </Form.Item>
                         </Box>
-                        <Box className={'right-container'}>
+                        <Box
+                            order={ isMobile ? '1' : '2'}
+                            gridColumn={isMobile? "span 12" : "span 4"}
+                            className={'right-container'}>
                             <Form.Item
                                 name={'totalCredit'}
                                 label={'Total Credit'}

@@ -1,10 +1,6 @@
 import {Box, IconButton} from "@mui/material";
 import {useLayout} from "../../../components/layout-context";
-import {useState} from "react";
-import DragIndicatorOutlinedIcon from "@mui/icons-material/DragIndicatorOutlined";
-import {DragOutlined, MinusCircleOutlined, PlusCircleOutlined, PlusCircleTwoTone} from "@ant-design/icons";
-import styled from "@emotion/styled";
-import {Button} from "antd";
+import {MinusCircleOutlined, PlusCircleOutlined} from "@ant-design/icons";
 import {ACTION} from "../common/common-data";
 import {PinOutLinedIcon} from "../dialog/daily-modal";
 
