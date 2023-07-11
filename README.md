@@ -11,9 +11,11 @@ Using tech:
 + Design to use in PC and Mobile
 
 PC:
+
 ![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/1a9582ed-d3d0-49ee-8406-519469ddd0bd)
 
 Mobile:
+
 ![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/501e623f-0231-4900-9c03-b3db85f62566)
 
 + Server sent event
