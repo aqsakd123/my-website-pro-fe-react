@@ -5,6 +5,17 @@ Using tech:
 ![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/e8523749-e2a2-43b6-9925-b5d8d54f4470)
 
 + Ant design and DARK/LIGHT mode
+
+![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/8d2c5dbe-2964-4bc6-86a1-9bede7ce05db)
+
++ Design to use in PC and Mobile
+
+PC:
+![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/1a9582ed-d3d0-49ee-8406-519469ddd0bd)
+
+Mobile:
+![image](https://github.com/aqsakd123/my-website-pro-fe-react/assets/112476093/501e623f-0231-4900-9c03-b3db85f62566)
+
 + Server sent event
 + Redux
 + Firebase as login and authen
