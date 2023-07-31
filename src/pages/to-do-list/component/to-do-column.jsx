@@ -41,8 +41,10 @@ export default function ToDoColumn({typeCode}) {
     }
 
     function handleOnDragEnd(result){
-        if (!result?.destination) return;
-        if (result.destination.index === result.source.index) return;
+        if (!result?.destination
+            || result.destination.index === result.source.index
+            || todoList[result.destination.index]?.pinned || todoList[result.source.index]?.pinned
+        ) return;
         if (filter.orderItem !== 'taskListOrder') {
             errorInfo('DRAG_ORDER_ONLY')
             return;

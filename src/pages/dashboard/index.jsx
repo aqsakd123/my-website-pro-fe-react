@@ -29,7 +29,7 @@ export default function Dashboard() {
     return (
         <Box
             display="grid"
-            gridTemplateColumns={isMobile ? "fill": "repeat(12, 1fr)"}
+            gridTemplateColumns={isMobile ? "1fr": "repeat(12, 1fr)"}
             gridAutoRows="300px"
             gap="20px"
             rowGap="20px"

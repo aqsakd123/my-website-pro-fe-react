@@ -94,12 +94,21 @@ export function arrayToTimeLineArray(array){
             res = res.concat(item)
         }
     })
+    resTime.sort((a, b) => {
+        const loopTimeA = dayjsFormat(a.loopTime)
+        const currentTimeA = new Date()
+        currentTimeA.setHours(new Date(loopTimeA).getHours())
+        currentTimeA.setMinutes(new Date(loopTimeA).getMinutes())
+
+        const loopTimeB = dayjsFormat(b.loopTime)
+        const currentTimeB = new Date()
+        currentTimeB.setHours(new Date(loopTimeB).getHours())
+        currentTimeB.setMinutes(new Date(loopTimeB).getMinutes())
+
+        if (currentTimeA === null) return -1;
+        if (currentTimeB === null) return 1;
+        return currentTimeA - currentTimeB;
+    })
     res = res.concat(resTime)
-    return res.sort((a, b) => {
-        const loopTimeA = ((dayjsFormat(a.loopTime)))
-        const loopTimeB = ((dayjsFormat(b.loopTime)))
-        if (loopTimeA === null) return -1;
-        if (loopTimeB === null) return 1;
-        return loopTimeA - loopTimeB;
-    });
+    return res;
 }

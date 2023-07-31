@@ -145,17 +145,19 @@ export function LayoutProvider({ children }) {
     }
 
     const theme = {
-        colorPrimary: isDarkMode? colors.blueAccent[800] : colors.blueAccent[300],
+        colorPrimary: isDarkMode? colors.blueAccent[700] : colors.blueAccent[300],
+        colorPrimaryText: colors.primary[900],
+        colorPrimaryTextActive: colors.primary[900],
         colorTextBase: colors.primary[100],
-        colorTextTertiary	: colors.primary[100],
+        colorTextTertiary: colors.primary[900],
         colorBgElevated: colors.primary[400],
+        colorBgSpotlight: "#1f2a40",
         colorBgContainer: isDarkMode ? colors.primary[400] : "white"
     }
 
     return (
         <LayoutContext.Provider value={value}>
             <div
-                // className={'background-setup'}
                 style={{ backgroundImage: `url('background/abstract-2.jpg')`, color: colors.primary[100], width: '100%', height: '100%', backgroundSize: '100% 100%' }}>
                 <ConfigProvider
                     theme={{

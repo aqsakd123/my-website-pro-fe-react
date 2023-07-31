@@ -497,10 +497,10 @@ export default function DailyModal({id, showModal, setShowModal, undoDelete}) {
                                     {(fields, { add, remove, move }) => (
                                         <Box>
                                             <Form.Item>
-                                                <Button style={{ width: '150px', marginBottom: '5px' }}
+                                                <Button style={{ width: 'auto', marginBottom: '5px' }}
                                                         type="text"
                                                         onClick={() => add({ typeCode: showModal })} block icon={<PlusOutlined />}>
-                                                    Add more task
+                                                    Add more task ({form.getFieldValue('children').filter(item => item.isCompleted).length}/{form.getFieldValue('children').length})
                                                 </Button>
                                             </Form.Item>
                                             <DragDropContext onDragEnd={handleOnDragEnd}>

@@ -29,7 +29,7 @@ export default function HobbyToDoItemBox({data, setShowModal, handleChangeStatus
             >
                 <Box sx={{ display: 'flex' }}>
                     {data?.pinned &&
-                    <Box className={'focus'} style={{ width: '50px' }}>
+                    <Box className={'focus'} style={{ width: '50px', scale: '0.7' }}>
                         <PinOutLinedIcon />
                     </Box>
                     }

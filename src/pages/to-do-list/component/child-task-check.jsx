@@ -13,12 +13,12 @@ export default function ChildTaskCheckList({showModal, childrenName = 'childTask
     return (
         <Box>
             <Form.Item>
-                <Button style={{ width: '150px', marginBottom: '5px' }}
+                <Button style={{ width: 'auto', marginBottom: '5px' }}
                         type="text"
                         disabled={isGroup ? false : (form.getFieldValue('isCompleted') || form.getFieldValue('isDeleted'))}
                         onClick={() => add(addObject)} block icon={<PlusOutlined />}
                 >
-                    { isGroup ? 'Add more group task' : 'Add more task' }
+                    { isGroup ? 'Add more group task' : 'Add more task' } ({ form.getFieldValue(isGroup ? 'childTaskGroup' : 'childTaskCheck')?.filter(item => item.isCompleted)?.length}/{form.getFieldValue(isGroup ? 'childTaskGroup' : 'childTaskCheck')?.length})
                 </Button>
             </Form.Item>
             <DragDropContext onDragEnd={(res) => handleOnDragEnd(res, childrenName)}>
